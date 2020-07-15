@@ -28,7 +28,7 @@ personality_insights = PersonalityInsightsV3(
 )
 
 personality_insights.set_service_url(
-    'https://api.eu-gb.personality-insights.watson.cloud.ibm.com/instances/5261ab93-9fc2-4710-84fc-83c043c2ea34')
+    '{url}')
 
 with open(join(dirname(__file__), './speech-to-text/profile.txt')) as profile_txt:
     profile = personality_insights.profile(
