@@ -17,7 +17,6 @@ moviepy==1.0.3
 numpy==1.19.0
 Pillow==7.2.0
 proglog==0.1.9
-PyAudio==0.2.11
 pydocstyle==5.0.2
 pydub==0.24.1
 pytz==2020.1
