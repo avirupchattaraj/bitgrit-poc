@@ -9,13 +9,17 @@ from flask import Flask, json, request
 from flask_restful import reqparse
 from nltk import word_tokenize
 #video api's imports
-from video_mp3 import video_converter
-from mp3_wav import wav_conversion
-from speech_text import speech_conversion
+# from video_mp3 import video_converter
+# from mp3_wav import wav_conversion
+# from speech_text import speech_conversion
 from ibm_watson import PersonalityInsightsV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from os.path import join, dirname
 import json
+import moviepy.editor as mp
+import pydub
+import speech_recognition as sr
+r = sr.Recognizer()
 
 app=Flask(__name__)
 @app.route("/resume",methods=['POST'])
@@ -98,6 +102,31 @@ def listtostr(s):
         return " "
     listToStr = ' '.join(map(str, s))
     return listToStr
+
+# movie to mp3 file conversion
+def video_converter(video_path):
+    video_clip = mp.VideoFileClip(video_path)
+    video_clip.audio.write_audiofile(r"./audio/audio.mp3")
+    return os.path.abspath(r"./audio/audio.mp3")
+
+# mp3 to wav file conversion
+def wav_conversion(audio_path):
+    sound = pydub.AudioSegment.from_mp3(audio_path)
+    sound.export('./audio/audio.wav', format='wav')
+    return os.path.abspath('./audio/audio.wav')
+
+# wav to text file conversion
+def speech_conversion(audio_path):
+    with sr.AudioFile(audio_path) as source:
+        audio = r.record(source)
+        val = r.recognize_google(audio)
+        return val
+
+
+@app.route("/video",methods=['POST'])
+def get_text_from_video():
+    pass
+
 
 
 
