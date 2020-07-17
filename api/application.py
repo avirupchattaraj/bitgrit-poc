@@ -25,7 +25,6 @@ class UserBigFive(db.Model):
 # Create the table
 db.create_all()
 
-
 # Create data abstraction layer
 class UserBigFiveSchema(Schema):
     class Meta:
