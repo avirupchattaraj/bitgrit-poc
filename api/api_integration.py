@@ -5,7 +5,7 @@ from pyresparser import ResumeParser
 import random
 import string
 import os
-from flask import Flask, json, request
+from flask import Flask, json, request,redirect,render_template
 from flask_restful import reqparse
 from nltk import word_tokenize
 #video api's imports
@@ -23,6 +23,7 @@ r = sr.Recognizer()
 
 app=Flask(__name__)
 @app.route("/resume",methods=['POST'])
+app.config["VIDEO_UPLOAD"]='./bitgrit-poc/video'
 def get_contents():
     parser = reqparse.RequestParser()
     parser.add_argument('enc', type=str, location='form')
@@ -127,7 +128,10 @@ def speech_conversion(audio_path):
 def get_text_from_video():
     
     # Video input taking and storage
-
+    if request.method="POST":
+        if request.files:
+            video=request.files['video']
+            video.save(os.path.join('app.config['VIDEO_UPLOAD']',video.filename))
     
     
     # Processing of video starts
@@ -154,25 +158,9 @@ def get_text_from_video():
         ).get_result()
 
     value=json.dumps(profile,indent=2)
-
     return value,200
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__=='__main__':
     app.run(debug=True)
+
