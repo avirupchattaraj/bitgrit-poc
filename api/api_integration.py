@@ -125,7 +125,41 @@ def speech_conversion(audio_path):
 
 @app.route("/video",methods=['POST'])
 def get_text_from_video():
-    pass
+    
+    # Video input taking and storage
+
+    
+    
+    # Processing of video starts
+    audio_path = video_converter(video_path)
+    wav_path = wav_conversion(audio_path)
+    fvalue = speech_conversion(wav_path)
+
+    authenticator = IAMAuthenticator('{apikey}')
+    personality_insights = PersonalityInsightsV3(
+    version='2017-10-13',
+    authenticator=authenticator)
+
+    personality_insights.set_service_url(
+    '{url}')
+
+
+    with open(join(dirname(__file__), './speech-to-text/profile.txt')) as profile_txt:
+        profile = personality_insights.profile(
+            profile_txt.read(),
+            'application/json',
+            content_type='text/plain',
+            consumption_preferences=True,
+            raw_scores=True
+        ).get_result()
+
+    value=json.dumps(profile,indent=2)
+
+    return value,200
+
+
+
+
 
 
 

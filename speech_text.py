@@ -7,3 +7,5 @@ def speech_conversion(audio_path):
         audio = r.record(source)
         val = r.recognize_google(audio)
         return val
+
+
